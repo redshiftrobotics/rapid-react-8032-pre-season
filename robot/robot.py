@@ -3,7 +3,7 @@ import wpilib
 import magicbot
 import rev
 
-
+# TODO: Move to separate file
 class DriveTrain:
     frontLeftMotor: rev.CANSparkMax
     frontRightMotor: rev.CANSparkMax
@@ -27,44 +27,26 @@ class DriveTrain:
         self.backLeftMotor.set(self.leftMotors)
         self.frontRightMotor.set(self.rightMotors)
         self.bakRightMotor.set(self.rightMotors)
-         
-        self.leftMotors = 0 
-        self.rightMotors = 0 
-         
         
-        
-
+        # TODO: Add documentation to these two lines
+        self.leftMotors = 0
+        self.rightMotors = 0
 class MyRobot(magicbot.MagicRobot):
-  
     drivetrain: DriveTrain
 
     def createObjects(self):
-        '''Create motors and stuff here'''
-
+        # TODO: create joystick wrapper class (maybe use the one from last yar)
         self.driverJoystick = wpilib.Joystick(0)
 
-        #1 is brushless
-        self.drivetrain_frontLeftMotor = rev.CANSparkMax(3, 1)
-        self.drivetrain_frontRightMotor = rev.CANSparkMax(2, 1)
-        self.drivetrain_backLeftMotor = rev.CANSparkMax(4, 1)
-        self.drivetrain_backRightMotor = rev.CANSparkMax(1, 1)
-
-     
-
-    # High level components go first
-    
-   
-
-    # Low level components come last
-
-    
+        # Switched to using rev.MotorType here
+        self.drivetrain_frontLeftMotor = rev.CANSparkMax(3, rev.MotorType.kBrushless)
+        self.drivetrain_frontRightMotor = rev.CANSparkMax(2, rev.MotorType.kBrushless)
+        self.drivetrain_backLeftMotor = rev.CANSparkMax(4, rev.MotorType.kBrushless)
+        self.drivetrain_backRightMotor = rev.CANSparkMax(1, rev.MotorType.kBrushless)
 
     def teleopPeriodic(self):
         speed = 0.1
         self.drivetrain.tankDrive(speed*self.driverJoystick.getY(), speed* self.driverJoystick.getTwist())
-
-
-
 
 if __name__ == '__main__':
     wpilib.run(MyRobot)
