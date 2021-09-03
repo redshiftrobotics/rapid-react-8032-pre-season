@@ -1,14 +1,14 @@
 import magicbot
 import wpilib
-from magicbot import StateMachine, state, timed_state
+import magicbot
 import rev
 
 
 class DriveTrain:
-    frontLeftMotor: rev.CANSsparkMax
-    frontRightMotor: rev.CANSsparkMax
-    backLeftMotor: rev.CANSsparkMax
-    bakRightMotor: rev.CANSsparkMax
+    frontLeftMotor: rev.CANSparkMax
+    frontRightMotor: rev.CANSparkMax
+    backLeftMotor: rev.CANSparkMax
+    bakRightMotor: rev.CANSparkMax
 
     def __init__(self):
         self.leftMotors = 0
@@ -44,10 +44,10 @@ class MyRobot(magicbot.MagicRobot):
         self.driverJoystick = wpilib.Joystick(0)
 
         #1 is brushless
-        self.drivetrain_frontLeftMotor = rev.CANSsparkMax(3, 1)
-        self.drivetrain_frontRightMotor = rev.CANSsparkMax(2, 1)
-        self.drivetrain_bakcLeftMotor = rev.CANSsparkMax(4, 1)
-        self.drivetrain_backRighttMotor = rev.CANSsparkMax(1, 1)
+        self.drivetrain_frontLeftMotor = rev.CANSparkMax(3, 1)
+        self.drivetrain_frontRightMotor = rev.CANSparkMax(2, 1)
+        self.drivetrain_backLeftMotor = rev.CANSparkMax(4, 1)
+        self.drivetrain_backRightMotor = rev.CANSparkMax(1, 1)
 
      
 
