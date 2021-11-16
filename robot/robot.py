@@ -1,52 +1,53 @@
 import magicbot
 import wpilib
-import magicbot
 import rev
+from components.drivetrain import DriveTrain
 
-# TODO: Move to separate file
-class DriveTrain:
-    frontLeftMotor: rev.CANSparkMax
-    frontRightMotor: rev.CANSparkMax
-    backLeftMotor: rev.CANSparkMax
-    bakRightMotor: rev.CANSparkMax
 
-    def __init__(self):
-        self.leftMotors = 0
-        self.rightMotors = 0
-
-    def tankDrive(self, leftSide, rightSide):
-        self.leftMotors = leftSide
-        self.rightMotors = rightSide
-
-    def arcadeDrive(self, frontBack, turn):
-        self.leftMotors = frontBack - turn
-        self.rightMotors = frontBack + turn
-
-    def excecute(self):
-        self.frontLeftMotor.set(self.leftMotors)
-        self.backLeftMotor.set(self.leftMotors)
-        self.frontRightMotor.set(self.rightMotors)
-        self.bakRightMotor.set(self.rightMotors)
-        
-        # TODO: Add documentation to these two lines
-        self.leftMotors = 0
-        self.rightMotors = 0
 class MyRobot(magicbot.MagicRobot):
     drivetrain: DriveTrain
 
     def createObjects(self):
         # TODO: create joystick wrapper class (maybe use the one from last yar)
         self.driverJoystick = wpilib.Joystick(0)
-
+        self.driverJoystick.setZChannel(5)
         # Switched to using rev.MotorType here
+
         self.drivetrain_frontLeftMotor = rev.CANSparkMax(3, rev.MotorType.kBrushless)
         self.drivetrain_frontRightMotor = rev.CANSparkMax(2, rev.MotorType.kBrushless)
         self.drivetrain_backLeftMotor = rev.CANSparkMax(4, rev.MotorType.kBrushless)
         self.drivetrain_backRightMotor = rev.CANSparkMax(1, rev.MotorType.kBrushless)
 
+        self.drivetrain_frontLeftMotor.setInverted(False)
+        self.drivetrain_backLeftMotor.setInverted(False)
+        self.drivetrain_backRightMotor.setInverted(True)
+        self.drivetrain_frontRightMotor.setInverted(True)
+
+        # self.drivetrain_leftEncoder = self.drivetrain_backLeftMotor.getAlternateEncoder(rev.CANEncoder.AlternateEncoderType.kQuadrature, 4096)
+        # self.drivetrain_rightEncoder = self.drivetrain_backRightMotor.getAlternateEncoder(rev.CANEncoder.AlternateEncoderType.kQuadrature, 4096)
+        # self.drivetrain_leftEncoder = self.drivetrain_backLeftMotor.getEncoder(rev.CANEncoder.EncoderType.kHallSensor, 4096)
+        # self.drivetrain_rightEncoder = self.drivetrain_backRightMotor.getEncoder(rev.CANEncoder.EncoderType.kHallSensor, 4096)
+        self.drivetrain_leftEncoder = self.drivetrain_backLeftMotor.getEncoder()
+        self.drivetrain_rightEncoder = self.drivetrain_backRightMotor.getEncoder()
+
+
+        
+
+    def teleopInit(self):
+        self.drivetrain.resetEncoders()
+
     def teleopPeriodic(self):
-        speed = 0.1
-        self.drivetrain.tankDrive(speed*self.driverJoystick.getY(), speed* self.driverJoystick.getTwist())
+        speed = 0.2
+        self.drivetrain.tankDrive(-1* speed*self.driverJoystick.getY(), -1* speed* self.driverJoystick.getZ())
+        print(self.driverJoystick.getRawAxis(1))
+        self.logger.info(self.drivetrain.getLeftWheelDistance())
+        wpilib.SmartDashboard.putNumber('leftJoystick', speed*self.driverJoystick.getY())
+
+    def autonomousInit(self):
+        self.drivetrain.resetEncoders()
+
+
+   
 
 if __name__ == '__main__':
     wpilib.run(MyRobot)
