@@ -11,7 +11,6 @@ class MyRobot(magicbot.MagicRobot):
         # TODO: create joystick wrapper class (maybe use the one from last yar)
         self.driverJoystick = wpilib.Joystick(0)
         self.driverJoystick.setZChannel(5)
-        # Switched to using rev.MotorType here
 
         self.drivetrain_frontLeftMotor = rev.CANSparkMax(3, rev.MotorType.kBrushless)
         self.drivetrain_frontRightMotor = rev.CANSparkMax(2, rev.MotorType.kBrushless)
@@ -23,20 +22,14 @@ class MyRobot(magicbot.MagicRobot):
         self.drivetrain_backRightMotor.setInverted(True)
         self.drivetrain_frontRightMotor.setInverted(True)
 
-        # self.drivetrain_leftEncoder = self.drivetrain_backLeftMotor.getAlternateEncoder(rev.CANEncoder.AlternateEncoderType.kQuadrature, 4096)
-        # self.drivetrain_rightEncoder = self.drivetrain_backRightMotor.getAlternateEncoder(rev.CANEncoder.AlternateEncoderType.kQuadrature, 4096)
-        # self.drivetrain_leftEncoder = self.drivetrain_backLeftMotor.getEncoder(rev.CANEncoder.EncoderType.kHallSensor, 4096)
-        # self.drivetrain_rightEncoder = self.drivetrain_backRightMotor.getEncoder(rev.CANEncoder.EncoderType.kHallSensor, 4096)
         self.drivetrain_leftEncoder = self.drivetrain_backLeftMotor.getEncoder()
         self.drivetrain_rightEncoder = self.drivetrain_backRightMotor.getEncoder()
-
-
-        
 
     def teleopInit(self):
         self.drivetrain.resetEncoders()
 
     def teleopPeriodic(self):
+        '''This sets the max speed that the robot can go and also controls the how fast it '''
         speed = 0.2
         self.drivetrain.tankDrive(-1* speed*self.driverJoystick.getY(), -1* speed* self.driverJoystick.getZ())
         print(self.driverJoystick.getRawAxis(1))
@@ -45,9 +38,6 @@ class MyRobot(magicbot.MagicRobot):
 
     def autonomousInit(self):
         self.drivetrain.resetEncoders()
-
-
-   
 
 if __name__ == '__main__':
     wpilib.run(MyRobot)

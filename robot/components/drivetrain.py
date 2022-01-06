@@ -22,10 +22,12 @@ class DriveTrain:
         self.rightMotors = rightSide
 
     def arcadeDrive(self, frontBack, turn):
+        '''one joystick controls the robot's left and right motors'''
         self.leftMotors = frontBack - turn
         self.rightMotors = frontBack + turn
 
     def execute(self):
+        '''this groups the motors to their sides and stors and pushes the encoder's data to the dashboard'''
         self.frontLeftMotor.set(self.leftMotors)
         self.backLeftMotor.set(self.leftMotors)
         self.frontRightMotor.set(self.rightMotors)
@@ -33,7 +35,7 @@ class DriveTrain:
         wpilib.SmartDashboard.putNumber('leftWheel', self.getLeftWheelDistance())
         wpilib.SmartDashboard.putNumber('RightWheel', self.getRightWheelDistance())
 
-        # TODO: Add documentation to these two lines
+        '''this sets the defalt speed to 0 so the robot does not just turn on and run off'''
         self.leftMotors = 0
         self.rightMotors = 0
 
