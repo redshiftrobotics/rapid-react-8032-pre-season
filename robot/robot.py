@@ -29,6 +29,9 @@ class MyRobot(magicbot.MagicRobot):
         # self.drivetrain_rightEncoder = self.drivetrain_backRightMotor.getEncoder(rev.CANEncoder.EncoderType.kHallSensor, 4096)
         self.drivetrain_leftEncoder = self.drivetrain_backLeftMotor.getEncoder()
         self.drivetrain_rightEncoder = self.drivetrain_backRightMotor.getEncoder()
+        self.exSole = wpilib.DoubleSolenoid(0,0,1)
+        self.c = wpilib.Compressor(0)
+
 
 
         
@@ -36,12 +39,24 @@ class MyRobot(magicbot.MagicRobot):
     def teleopInit(self):
         self.drivetrain.resetEncoders()
 
+        self.c.setClosedLoopControl(True)
+        self.c.start()
+        
+
+
     def teleopPeriodic(self):
-        speed = 0.2
-        self.drivetrain.tankDrive(-1* speed*self.driverJoystick.getY(), -1* speed* self.driverJoystick.getZ())
-        print(self.driverJoystick.getRawAxis(1))
-        self.logger.info(self.drivetrain.getLeftWheelDistance())
-        wpilib.SmartDashboard.putNumber('leftJoystick', speed*self.driverJoystick.getY())
+
+        
+        #speed = 0.2
+        #self.drivetrain.tankDrive(-1* speed*self.driverJoystick.getY(), -1* speed* self.driverJoystick.getZ())
+        #print(self.driverJoystick.getRawAxis(1))
+        #self.logger.info(self.drivetrain.getLeftWheelDistance())
+        #wpilib.SmartDashboard.putNumber('leftJoystick', speed*self.driverJoystick.getY())
+
+        if self.driverJoystick.getTopPressed() == True:
+            self.exSole.set(wpilib.DoubleSolenoid.Value.kForward)
+
+
 
     def autonomousInit(self):
         self.drivetrain.resetEncoders()
